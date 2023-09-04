@@ -1,3 +1,4 @@
+import sys, os, math
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -16,9 +17,12 @@ from Discriminator import Discriminator
 from ParticleDataset import ParticleDataset
 
 QT = qt(output_distribution='normal',n_quantiles=20000,subsample=100000)
-data_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_10M.csv'
-norm_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_55M_stats.csv'
-output_dir = '/Users/alonlevi/PycharmProjects/ML_Project/saved_Gen.pt'
+#data_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_10M.csv' ### this is for local running
+data_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_10M.csv' ### this is from WIS cluster
+#norm_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_55M_stats.csv'### this is for local running
+norm_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_55M_stats.csv'
+#output_dir = '/Users/alonlevi/PycharmProjects/ML_Project/saved_Gen.pt' ### this is for local running
+output_dir = '/storage/agrp/alonle/GAN_Output/saved_Gen.pt'
 
 dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
@@ -31,8 +35,8 @@ optimizer_G = optim.Adam(net_G.parameters(), lr = 0.0001, betas= (0.5,0.999))
 optimizer_D = optim.Adam(net_D.parameters(), lr = 0.0001, betas= (0.5,0.999))
 
 
-def get_gradient(crit: net_D, real: torch.Tensor, fake: torch.Tensor,
-                 epsilon: torch.Tensor) -> torch.tensor:
+def get_gradient(net_D, real, fake,
+                 epsilon):
 
     mixed_images = real * epsilon + fake * (1 - epsilon)
 
@@ -51,7 +55,7 @@ def get_gradient(crit: net_D, real: torch.Tensor, fake: torch.Tensor,
 G_losses = []
 D_losses = []
 
-num_epochs = 20
+num_epochs = sys.argv[1]
 Lambda = 10 ** (-3)
 n_crit = 5
 
