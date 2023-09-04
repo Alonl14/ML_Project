@@ -28,7 +28,11 @@ dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
 
 N_z=100
-mps_device = torch.device('mps')
+if torch.cuda.is_available():
+    mps_device = torch.device('cuda')
+else:
+    mps_device = torch.device('mps')
+
 net_G = Generator.Generator(N_z).to(mps_device)
 net_D = Discriminator().to(mps_device)
 optimizer_G = optim.Adam(net_G.parameters(), lr = 0.0001, betas= (0.5,0.999))
