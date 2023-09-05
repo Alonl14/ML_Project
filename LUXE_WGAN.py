@@ -16,6 +16,8 @@ from torch.nn.functional import log_softmax
 from Discriminator import Discriminator
 from ParticleDataset import ParticleDataset
 
+### change from Mac
+
 QT = qt(output_distribution='normal',n_quantiles=20000,subsample=100000)
 #data_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_10M.csv' ### this is for local running
 data_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_10M.csv' ### this is from WIS cluster
