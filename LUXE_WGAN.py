@@ -24,7 +24,7 @@ data_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_10M.csv' ### this is 
 #norm_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_55M_stats.csv'### this is for local running
 norm_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_55M_stats.csv'
 #output_dir = '/Users/alonlevi/PycharmProjects/ML_Project/saved_Gen.pt' ### this is for local running
-output_dir = '/storage/agrp/alonle/GAN_Output/saved_Gen.pt'
+output_dir = '/storage/agrp/alonle/GAN_Output/'
 
 dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
@@ -133,11 +133,13 @@ for epoch in tqdm.tqdm_notebook(range(num_epochs), desc=' epochs', position=0):
 
         iters += 1
 
-    torch.save(net_G.state_dict(), output_dir)
+    torch.save(net_G.state_dict(), output_dir+'Saved_Gen.pt')
 
     KLD = torch.cat((KLD, S/iters), dim=0)
     
     G_losses.append(avg_error_G / iters)
     D_losses.append(avg_error_D / iters)
     print(f'{epoch}/{num_epochs}\tLoss: {(avg_error_D + avg_error_G) / iters:.4f}')
-
+KLD = KLD.to('cpu').detach().numpy()
+df = pd.DataFrame(KLD)
+df.to_csv(output_dir+'KL_div.csv')
