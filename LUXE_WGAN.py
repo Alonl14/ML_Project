@@ -28,10 +28,13 @@ dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
 
 N_z=100
+print(torch.cuda.is_available())
+print(f"CUDA version: {torch.version.cuda}")
 if torch.cuda.is_available():
     mps_device = torch.device('cuda')
 else:
     mps_device = torch.device('mps')
+    print('mps')
 
 net_G = Generator.Generator(N_z).to(mps_device)
 net_D = Discriminator().to(mps_device)
@@ -39,7 +42,7 @@ optimizer_G = optim.Adam(net_G.parameters(), lr = 0.0001, betas= (0.5,0.999))
 optimizer_D = optim.Adam(net_D.parameters(), lr = 0.0001, betas= (0.5,0.999))
 
 
-def get_gradient(net_D, real, fake,
+def get_gradient(crit, real, fake,
                  epsilon):
 
     mixed_images = real * epsilon + fake * (1 - epsilon)
@@ -66,7 +69,7 @@ n_crit = 5
 generated_df = pd.DataFrame([])
 KLD = torch.tensor([], device=mps_device)
 print("Starting Training Loop...")
-
+num_epochs = np.int64(num_epochs)
 for epoch in tqdm.tqdm_notebook(range(num_epochs), desc=' epochs', position=0):
     net_G.to(mps_device)
     net_G.train()
@@ -128,12 +131,11 @@ for epoch in tqdm.tqdm_notebook(range(num_epochs), desc=' epochs', position=0):
 
         iters += 1
 
-    if len(G_losses) > 0:
-        last = G_losses[-1] + D_losses[-1]
-        if avg_error_G < last:
-            torch.save(net_G.state_dict(), output_dir)
+    torch.save(net_G.state_dict(), output_dir)
 
-    KLD = torch.cat((KLD, S), dim=0)
+    KLD = torch.cat((KLD, S/iters), dim=0)
+    
     G_losses.append(avg_error_G / iters)
     D_losses.append(avg_error_D / iters)
     print(f'{epoch}/{num_epochs}\tLoss: {(avg_error_D + avg_error_G) / iters:.4f}')
+
