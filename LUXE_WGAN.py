@@ -18,7 +18,7 @@ from ParticleDataset import ParticleDataset
 
 ### change from Mac
 
-QT = qt(output_distribution='normal',n_quantiles=20000,subsample=100000)
+QT = qt(output_distribution='normal',n_quantiles=500000,subsample=1000000)
 #data_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_10M.csv' ### this is for local running
 data_path = '/storage/agrp/alonle/GAN_InputSample/LUXEDumpFiles_FullSim_0p06BX_DetId33_ForStudents.csv' ### this is from WIS cluster
 #norm_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_55M_stats.csv'### this is for local running
