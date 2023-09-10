@@ -7,7 +7,7 @@ class ParticleDataset(Dataset):
     def __init__(self, data_path, norm_path, QT):
         super().__init__()
         self.data = pd.read_csv(data_path)
-        self.data = self.data[self.data[' pdg'].isin([2112])]  # 22 - photons , 2112 - neutrons
+        # self.data = self.data[self.data[' pdg'].isin([2112])]  # 22 - photons , 2112 - neutrons
         self.data[' rx'] = np.sqrt(self.data[' xx'].values ** 2 + self.data[' yy'].values ** 2)
         self.data[' rp'] = np.sqrt(self.data[' pxx'].values ** 2 + self.data[' pyy'].values ** 2)
         self.data[' phi_p'] = np.arctan2(self.data[' pyy'].values, self.data[' pxx'].values) + np.pi
