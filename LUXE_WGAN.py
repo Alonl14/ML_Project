@@ -30,7 +30,7 @@ dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
 
 N_z=100
-print(torch.cuda.is_available())
+print(torch.cuda.device_count())
 print(f"CUDA version: {torch.version.cuda}")
 if torch.cuda.is_available():
     mps_device = torch.device('cuda')
@@ -40,6 +40,8 @@ else:
 
 net_G = Generator.Generator(N_z).to(mps_device)
 net_D = Discriminator().to(mps_device)
+net_G = nn.DataParallel(net_G)
+net_D = nn.DataParallel(net_D)
 optimizer_G = optim.Adam(net_G.parameters(), lr = 0.0001, betas= (0.5,0.999))
 optimizer_D = optim.Adam(net_D.parameters(), lr = 0.0001, betas= (0.5,0.999))
 
@@ -133,7 +135,7 @@ for epoch in tqdm.tqdm_notebook(range(num_epochs), desc=' epochs', position=0):
 
         iters += 1
 
-    torch.save(net_G.state_dict(), output_dir+'Saved_Gen.pt')
+    torch.save(net_G.state_dict(), output_dir+'Saved_Gen_55M1E.pt')
 
     KLD = torch.cat((KLD, S/iters), dim=0)
     

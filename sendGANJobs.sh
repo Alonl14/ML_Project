@@ -22,7 +22,7 @@ fi
 mkdir -p ${DESTINATION}/run_${runid}/
 #### from where you are submitting jobs
 PRESENTDIRECTORY=${PWD}
-qsub -l ngpus=1,mem=32gb -v parname1=${nepoch},parname2=${PRESENTDIRECTORY} -q N -N "run_"$runid -o "${DESTINATION}/run_"${runid} -e "${DESTINATION}/run_"${runid} gridScriptGAN.sh
+qsub -l ngpus=4,mem=32gb -v parname1=${nepoch},parname2=${PRESENTDIRECTORY} -q N -N "run_"$runid -o "${DESTINATION}/run_"${runid} -e "${DESTINATION}/run_"${runid} gridScriptGAN.sh
 #### submit jobs to the PBS system
 sleep 1s
     
