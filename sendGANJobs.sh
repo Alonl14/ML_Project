@@ -14,15 +14,15 @@ DESTINATION="/storage/agrp/alonle/ClusterLogs"
 ### create the main directory if it does not exists
     
 ### if main directory/run_id exists, delete
-if [[ -d "${DESTINATION}/run_$runid" ]]; then
-    echo "Found a directory with output ${DESTINATION}/run_$runid! Deleting the previous one."
-    rm -rf ${DESTINATION}/run_$runid
-fi
+#if [[ -d "${DESTINATION}/run_$runid" ]]; then
+#    echo "Found a directory with output ${DESTINATION}/run_$runid! Deleting the previous one."
+#    rm -rf ${DESTINATION}/run_$runid
+#fi
    
 mkdir -p ${DESTINATION}/run_${runid}/
 #### from where you are submitting jobs
 PRESENTDIRECTORY=${PWD}
-qsub -l ngpus=4,mem=32gb -v parname1=${nepoch},parname2=${PRESENTDIRECTORY} -q N -N "run_"$runid -o "${DESTINATION}/run_"${runid} -e "${DESTINATION}/run_"${runid} gridScriptGAN.sh
+qsub -l ngpus=1,mem=64gb -v parname1=${nepoch},parname2=${PRESENTDIRECTORY} -q N -N "run_"$runid -o "${DESTINATION}/run_"${runid} -e "${DESTINATION}/run_"${runid} gridScriptGAN.sh
 #### submit jobs to the PBS system
 sleep 1s
     

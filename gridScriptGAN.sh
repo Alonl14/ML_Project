@@ -1,6 +1,6 @@
 #! /bin/bash
 #PBS -m n
-PBS -l walltime=72:00:00
+#PBS -l walltime=72:00:00
 
 #### script that run the python script, the MadGraph generator
 echo "Installing python3>>>>>>"
