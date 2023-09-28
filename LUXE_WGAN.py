@@ -24,7 +24,7 @@ data_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_55M.csv' ### this is 
 #norm_path = '/Users/alonlevi/PycharmProjects/ML_Project/Full_Sim_55M_stats.csv'### this is for local running
 norm_path = '/storage/agrp/alonle/GAN_InputSample/Full_Sim_55M_stats.csv'
 #output_dir = '/Users/alonlevi/PycharmProjects/ML_Project/saved_Gen.pt' ### this is for local running
-output_dir = '/storage/agrp/alonle/GAN_Output/'
+output_dir = '/storage/agrp/alonle/GAN_Output_50Epochs/'
 
 dataset = ParticleDataset(data_path, norm_path,QT)
 dataloader = DataLoader(dataset.data, batch_size = 2**9, shuffle = True)
